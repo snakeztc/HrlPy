@@ -15,7 +15,7 @@ class Representation(object):
     #: The Domain that this Representation is modeling
     domain = None
     #: Number of features in the representation
-    features_num = 0
+    state_features_num = 0
     #: Number of actions in the representation
     actions_num = 0
     # number of options
@@ -36,6 +36,9 @@ class Representation(object):
         self.option_num = len(tree.keys())
         self.logger = logging.getLogger("hrl.Representations." + self.__class__.__name__)
         self.random_state = np.random.RandomState(seed)
+
+    def Qs(self, o, s):
+        raise NotImplementedError("Implement Qs")
 
     def Q(self, o, s, u):
         raise NotImplementedError("Implement the q-funciton")

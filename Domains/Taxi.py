@@ -8,7 +8,7 @@ class Taxi(Domain):
     _map_size = 5
     # the probability that the car will drft
     _drift_prob = 0.2
-    _spot_locs = [[0, 0], [0, _map_size-1], [_map_size-1, 0], [_map_size-1, _map_size-2]]
+    _spot_locs = [[0, 0], [0, _map_size - 1], [_map_size - 1, 0], [_map_size - 1, _map_size - 2]]
     _action_names = {"up": 0, "down": 1, "left": 2, "right": 3, "pick": 4, "drop": 5}
     _step_reward = -1
     _win_reward = 20
@@ -19,13 +19,19 @@ class Taxi(Domain):
     discount_factor = 0.99
     actions_num = 6 # up, down, left, right, pick, drop
     # state is (dest, src, x, y)
-    statespace_limits = np.array([[0, 3], [0, 4], [0, _map_size-1], [0, _map_size-1]])
+    statespace_limits = np.array([[0, 4], [0, 5], [0, _map_size], [0, _map_size]])
     # x 0 1 2 3 4
     # 0 R  |    G
     # 1    |
     # 2
     # 3  |   |
     # 4 Y|   |B
+
+    def get_map_size(self):
+        return self._map_size
+
+    def get_spot_locations(self):
+        return self._spot_locs
 
     def is_terminal(self, s):
         s_dest = s[0]
@@ -37,10 +43,10 @@ class Taxi(Domain):
 
     def s0(self):
         while True:
-            s_des = self.random_state.random_integers(0, self._map_size-1)
-            s_src =self.random_state.random_integers(0, self._map_size-1)
-            s_x = self.random_state.random_integers(0, self._map_size-1)
-            s_y = self.random_state.random_integers(0, self._map_size-1)
+            s_des = self.random_state.random_integers(0, self._map_size - 1)
+            s_src =self.random_state.random_integers(0, self._map_size - 1)
+            s_x = self.random_state.random_integers(0, self._map_size - 1)
+            s_y = self.random_state.random_integers(0, self._map_size - 1)
             if s_src != s_des:
                 return np.array([s_des, s_src, s_x, s_y])
 
@@ -98,7 +104,7 @@ class Taxi(Domain):
             return reward, ns, self.is_terminal(ns)
 
         # with drift_prob the car will drift
-        if self.random_state.rand() < self._drift_prob:
+        if self.random_state.random_sample() < self._drift_prob:
             other_actions = [x for x in range(0, 4) if x != a]
             a = self.random_state.choice(other_actions)
 
