@@ -1,8 +1,9 @@
 from Agent import Agent
 from Policies.Policy import EpsilonGreedyPolicy
 
+
 class QLearning(Agent):
-    def execute(self, s, performance_run=False):
+    def learn(self, s, performance_run=False):
         root = self.representation.root
         Qs = self.representation.Qs(root, s)
         # choose an action

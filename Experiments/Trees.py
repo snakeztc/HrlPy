@@ -1,6 +1,21 @@
 from Representations.DagLinear import DagLinear
 
 
+class FlatTree(object):
+    tree1 = {"root": ["up", "down", "left", "right", "pick", "drop"]}
+    representation = None
+    domain = None
+
+    def __init__(self, domain, seed=1):
+        self.domain = domain
+        self.representation = DagLinear(domain, root="root", tree=self.tree1, terminals=self.terminals, seed=seed)
+
+    def terminals(self, o, s):
+        if o == "root":
+            return self.domain.is_terminal(s)
+        return False
+
+
 class Tree1(object):
     tree1 = {"root": ["get", "put"],
              "get": ["pick", "navi_get"],
@@ -35,7 +50,7 @@ class Tree1(object):
         if o == "navi_put":
             return self.domain.get_spot_locations()[s_dest] == [s_x, s_y]
 
-        return True
+        return False
 
 
 

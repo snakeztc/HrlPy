@@ -28,7 +28,6 @@ class Representation(object):
     def __init__(self, domain, root, tree, terminals, seed=1):
 
         self.domain = domain
-        self.state_space_dim = domain.state_space_dims
         self.actions_num = domain.actions_num
         self.root = root
         self.tree = tree

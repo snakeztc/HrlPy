@@ -12,10 +12,10 @@ class Agent(object):
     performance_policy = GreedyPolicy()
 
     def __init__(self, domain, representation, seed = 1):
-        self.logger = logging.getLogger("hrl.Agents." + self.__class__.__name__)
+        self.logger = logging.getLogger("hrl.Agent." + self.__class__.__name__)
         self.domain = domain
         self.random_state = np.random.RandomState(seed)
         self.representation = representation
 
-    def execute(self, s, performance_run=False):
+    def learn(self, s, performance_run=False):
         raise NotImplementedError("implement learning algorithm")
