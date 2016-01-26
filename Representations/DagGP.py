@@ -1,6 +1,5 @@
 import numpy as np
 from Representation import Representation
-import numpy.matlib
 
 
 
@@ -16,9 +15,6 @@ class DagLinear(Representation):
                                              - self.domain.statespace_limits[:, 0]))
         self.state_feature_base = np.append([0], np.cumsum(self.domain.statespace_limits[:-1, 1]
                                          - self.domain.statespace_limits[:-1, 0]))
-        for oID in tree.keys():
-            feature_num = self.state_features_num * len(self.tree.get(oID))
-            self.models[oID] = np.zeros(feature_num)
 
     def phi_sa(self, o, s, u):
         """
@@ -30,33 +26,28 @@ class DagLinear(Representation):
         """
         # feature vector
         phi = self.phi_s(s)
-        feature_num = phi.shape[1] * len(self.tree.get(o))
-        phi_sa = np.zeros((s.shape[0], feature_num))
-        for idx in range(0, s.shape[0]):
-            u_idx = u[idx]
-            phi_sa[idx, u_idx*self.state_features_num:(u_idx+1)*self.state_features_num] = phi[idx]
-
+        phi_sa = np.hstack((phi, u))
         return phi_sa
 
     def phi_s(self, s):
-        phi = np.zeros((s.shape[0], self.state_features_num))
-        base = np.matlib.repmat(self.state_feature_base, s.shape[0], 1)
-        sparse_s = np.matrix(base + s, dtype=np.int8)
-
-        # convert the sparse_s to one-hot phi
-        for idx in range(0, s.shape[0]):
-            phi[idx, sparse_s[idx, :]] = 1
+        phi = s
         return phi
 
     def Q(self, o, s, u):
         phi_sa = self.phi_sa(o, s, u)
-        q = np.dot(phi_sa, self.models.get(o))
+        model = self.models.get(o, None)
+        if model:
+            q = model.predict(phi_sa).ravel()
+        else:
+            q = np.zeros(s.shape[0])
         return q
 
     def Qs(self, o, s):
+        if s.ndim < 2:
+            s = np.matrix(s)
         qs = np.zeros((s.shape[0], len(self.tree.get(o))))
         for idx, u in enumerate(self.tree.get(o)):
-            temp_uIDs = np.ones(s.shape[0]) * idx
+            temp_uIDs = np.ones((s.shape[0], 1)) * idx
             qs[:, idx] = self.Q(o, s, temp_uIDs)
         return qs
 

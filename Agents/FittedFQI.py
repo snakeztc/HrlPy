@@ -1,7 +1,6 @@
 import numpy as np
 from BatchAgent import BatchAgent
-from sklearn.linear_model import LinearRegression
-
+from sklearn.neighbors import KNeighborsRegressor
 
 class FittedFQI(BatchAgent):
 
@@ -17,15 +16,15 @@ class FittedFQI(BatchAgent):
         X = self.representation.phi_sa("root", states, actions)
 
         for i in range(0, max_iter):
-            old_qs = self.representation.Qs("root", states)
+            #old_qs = np.reshape(self.representation.Q("root", states, actions), (-1, 1))
             nqs = self.representation.Qs("root", next_states)
             best_nqs = np.reshape(np.amax(nqs, axis=1), (-1, 1))
             y = rewards+ self.domain.discount_factor * best_nqs
-            resd = np.mean(np.abs(y - old_qs))
-            model = LinearRegression(fit_intercept=False)
+            #resd = np.mean(np.abs(y - old_qs))
+            model = KNeighborsRegressor(n_neighbors=2)
             model.fit(X, y)
-            self.representation.models["root"] = model.coef_.ravel()
-            print "Resudial is " + str(resd)
+            self.representation.models["root"] = model
+            #print "Residual is " + str(resd)
 
 
 

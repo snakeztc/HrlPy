@@ -86,7 +86,7 @@ class Taxi(Domain):
         # pick
         if a == self._action_names.get("pick"):
             if s_src < self._map_size-1 and [s_x, s_y] == self._spot_locs[s_src]:
-                ns = np.array([s_dest, self._map_size, s_x, s_y])
+                ns = np.array([s_dest, self._map_size-1, s_x, s_y])
                 reward = self._step_reward
             else:
                 ns = s

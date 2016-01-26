@@ -1,4 +1,4 @@
-from Representations.DagLinear import DagLinear
+from Representations.DagGP import DagLinear
 
 
 class FlatTree(object):
