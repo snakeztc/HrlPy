@@ -7,7 +7,7 @@ class Taxi(Domain):
     # domain dependent
     _map_size = 5
     # the probability that the car will drft
-    _drift_prob = 0.2
+    _drift_prob = 0.0
     _spot_locs = [[0, 0], [0, _map_size - 1], [_map_size - 1, 0], [_map_size - 1, _map_size - 2]]
     _action_names = {"up": 0, "down": 1, "left": 2, "right": 3, "pick": 4, "drop": 5}
     _step_reward = -1
@@ -62,8 +62,8 @@ class Taxi(Domain):
                          [[1, 1],[1, 2]],
                          [[3, 0],[3, 1]],
                          [[4, 0],[4, 1]],
-                         [[3, 3],[3, 4]],
-                         [[4, 3],[4, 4]]
+                         [[3, 2],[3, 3]],
+                         [[4, 2],[4, 3]]
                          ]
         if [a_xy, b_xy] in forbidden_set or [b_xy, a_xy] in forbidden_set:
             return False

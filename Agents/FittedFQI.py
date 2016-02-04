@@ -2,8 +2,8 @@ import numpy as np
 from BatchAgent import BatchAgent
 from sklearn.neighbors import KNeighborsRegressor
 
-class FittedFQI(BatchAgent):
 
+class FittedFQI(BatchAgent):
     def __init__(self, domain, representation, seed=1):
         super(FittedFQI, self).__init__(domain, representation, seed)
 
@@ -21,7 +21,7 @@ class FittedFQI(BatchAgent):
             best_nqs = np.reshape(np.amax(nqs, axis=1), (-1, 1))
             y = rewards+ self.domain.discount_factor * best_nqs
             #resd = np.mean(np.abs(y - old_qs))
-            model = KNeighborsRegressor(n_neighbors=2)
+            model = KNeighborsRegressor(n_neighbors=2, n_jobs=-1)
             model.fit(X, y)
             self.representation.models["root"] = model
             #print "Residual is " + str(resd)

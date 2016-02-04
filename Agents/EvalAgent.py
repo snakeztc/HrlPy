@@ -1,6 +1,5 @@
 import numpy as np
 
-
 class EvalAgent(object):
     agent = None
 
@@ -26,6 +25,7 @@ class EvalAgent(object):
 
             rewards[i] = local_r
 
+        print rewards
         print "mean of reward is " + str(np.mean(rewards))
         print "median of reward is " + str(np.median(rewards))
         print "Std of rewrad is " + str(np.std(rewards))

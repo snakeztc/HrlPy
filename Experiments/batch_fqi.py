@@ -36,13 +36,13 @@ def run():
         # begin to train a new model
         representation = tree.representation
         agent = FittedFQI(domain=taxi_evn, representation=representation)
-        agent.learn(experiences=reduced_exp_table, max_iter=30)
+        agent.learn(experiences=reduced_exp_table, max_iter=20)
 
         # evaluation
         test_agent =QLearning(taxi_evn, agent.representation)
         eval_agent = EvalAgent(test_agent)
         print "begin evlauation"
-        (eval_performance[idx], rewards) =eval_agent.eval(50, True)
+        (eval_performance[idx], rewards) =eval_agent.eval(10, discount=True)
 
 if __name__ == '__main__':
     run()
